@@ -5,18 +5,21 @@ import { URL } from "react-native-url-polyfill";
 import { IWebBrowser } from "./types/IWebBrowser";
 import { SdkInitParams, SdkLoginParams, SdkLogoutParams } from "./types/sdk";
 import { State } from "./types/State";
+import {
+  openBrowserAsync,
+  openAuthSessionAsync,
+  dismissAuthSession,
+  dismissBrowser,
+} from '@toruslabs/react-native-web-browser';
 
 class Web3Auth {
   initParams: SdkInitParams;
 
-  webBrowser: IWebBrowser;
-
-  constructor(webBrowser: IWebBrowser, initParams: SdkInitParams) {
+  constructor(initParams: SdkInitParams) {
     this.initParams = initParams;
     if (!this.initParams.sdkUrl) {
       this.initParams.sdkUrl = "https://sdk.openlogin.com";
     }
-    this.webBrowser = webBrowser;
   }
 
   async login(options: SdkLoginParams): Promise<State> {
@@ -68,7 +71,7 @@ class Web3Auth {
 
     log.info(`[Web3Auth] opening login screen in browser at ${url.href}, will redirect to ${redirectUrl}`);
 
-    return this.webBrowser.openAuthSessionAsync(url.href, redirectUrl);
+    return openAuthSessionAsync(url.href, redirectUrl);
   }
 }
 
